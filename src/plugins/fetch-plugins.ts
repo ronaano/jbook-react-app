@@ -55,16 +55,6 @@ export const fetchPlugin = (inputCode: string) => {
       });
 
       build.onLoad({ filter: /.*/ }, async (args: any) => {
-        // Check if we have the fetched file and if it is in the cache
-        const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
-          args.path
-        );
-
-        // if it is return it immediately
-        if (cachedResult) {
-          return cachedResult;
-        }
-
         // Build the object
         const { data, request } = await axios.get(args.path);
 
