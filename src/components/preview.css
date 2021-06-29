@@ -1,0 +1,7 @@
+.react-draggable-transparent-selection iframe {
+  pointer-events: none;
+}
+
+iframe {
+  background-color: white;
+}
