@@ -20,7 +20,7 @@ const initialState: CellsState = {
 };
 
 const reducer = produce(
-  (state: CellsState = initialState, action: Action): CellsState | void => {
+  (state: CellsState, action: Action): CellsState | void => {
     switch (action.type) {
       case ActionType.UPDATE_CELL:
         const { id, content } = action.payload;
@@ -58,7 +58,8 @@ const reducer = produce(
           state.order.splice(foundIndex, 0, cell.id);
         }
     }
-  }
+  },
+  initialState
 );
 
 const randomId = () => {
