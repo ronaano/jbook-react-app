@@ -72,4 +72,4 @@ export type Action =
   | BundleCompleteAction
   | FetchCellsAction
   | FetchCellsCompleteAction
-  | FetchCellsAction;
+  | FetchCellsErrorAction;
