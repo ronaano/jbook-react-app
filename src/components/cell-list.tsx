@@ -4,17 +4,22 @@ import CellListItem from './cell-list-item';
 import AddCell from './add-cell';
 import { Fragment, useEffect } from 'react';
 import { useActions } from '../hooks/useActions';
+import { saveCells } from '../state/action-creators';
 
 const CellList: React.FC = () => {
   const cells = useTypedSelector(({ cells: { order, data } }) =>
     order.map((id) => data[id])
   );
 
-  const { fetchCells } = useActions();
+  const { fetchCells, saveCells } = useActions();
 
   useEffect(() => {
     fetchCells();
   }, [fetchCells]);
+
+  useEffect(() => {
+    saveCells();
+  }, []);
 
   const renderedCells = cells.map((cell) => (
     <Fragment key={cell.id}>
