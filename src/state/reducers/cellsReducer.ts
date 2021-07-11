@@ -2,7 +2,6 @@ import { ActionType } from '../action-types';
 import { Action } from '../actions';
 import { Cell } from '../cell';
 import produce from 'immer';
-import CellListItem from '../../components/cell-list-item';
 
 interface CellsState {
   loading: boolean;
@@ -23,6 +22,9 @@ const initialState: CellsState = {
 const reducer = produce(
   (state: CellsState, action: Action): CellsState | void => {
     switch (action.type) {
+      case ActionType.SAVE_CELLS_ERROR:
+        state.error = action.payload;
+        return;
       case ActionType.FETCH_CELLS:
         state.loading = true;
         state.error = null;
