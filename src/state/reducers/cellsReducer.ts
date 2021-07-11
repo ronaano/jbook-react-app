@@ -2,6 +2,7 @@ import { ActionType } from '../action-types';
 import { Action } from '../actions';
 import { Cell } from '../cell';
 import produce from 'immer';
+import CellListItem from '../../components/cell-list-item';
 
 interface CellsState {
   loading: boolean;
@@ -22,6 +23,21 @@ const initialState: CellsState = {
 const reducer = produce(
   (state: CellsState, action: Action): CellsState | void => {
     switch (action.type) {
+      case ActionType.FETCH_CELLS:
+        state.loading = true;
+        state.error = null;
+        return;
+      case ActionType.FETCH_CELLS_COMPLETE:
+        state.order = action.payload.map((cell) => cell.id);
+        state.data = action.payload.reduce((acc, cell) => {
+          acc[cell.id] = cell;
+          return acc;
+        }, {} as CellsState['data']);
+        return;
+      case ActionType.FETCH_CELLS_ERROR:
+        state.loading = false;
+        state.error = action.payload;
+        return;
       case ActionType.UPDATE_CELL:
         const { id, content } = action.payload;
         state.data[id].content = content;
