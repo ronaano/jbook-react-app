@@ -33,6 +33,7 @@ export const bundlesSlice = createSlice({
         };
       }>
     ) {
+      console.log(state);
       state[action.payload.cellId] = {
         loading: false,
         code: action.payload.bundle.code,

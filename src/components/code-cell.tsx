@@ -3,8 +3,13 @@ import CodeEditor from './code-editor';
 import Preview from './preview';
 import Resizable from './resizable';
 import { Cell } from '../features/cells/cell';
-import { useCumulativeCode, useAppSelector } from '../hooks.ts';
+import {
+  useCumulativeCode,
+  useAppSelector,
+  useAppDispatch
+} from '../hooks/hooks';
 import { updateCell } from '../features/cells/cellsSlice';
+import { createBundle } from '../features/bundles/createBundle';
 import './code-cell.css';
 interface CodeCellProps {
   cell: Cell;
@@ -12,13 +17,20 @@ interface CodeCellProps {
 
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const bundle = useAppSelector((state) => state.bundles[cell.id]);
+  console.log(bundle);
   const cumulativeCode = useCumulativeCode(cell.id);
+  console.log(cumulativeCode);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!bundle) {
+      console.log('no bundle');
+      // TODO: Figure out why the preview window keeps loading even though a bundle appears with code inside of it
       createBundle(cell.id, cumulativeCode);
     }
     const timer = setTimeout(async () => {
+      console.log('there is a bundle');
+      console.log(cell.id + cumulativeCode);
       createBundle(cell.id, cumulativeCode);
     }, 1000);
     return () => {
@@ -39,7 +51,10 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
         <Resizable direction='horizontal'>
           <CodeEditor
             initialValue={cell.content}
-            onChange={(value) => updateCell({ id: cell.id, content: value })}
+            // TODO: Figure out how to stop each keypress calling updateCell, maybe using setTimeout
+            onChange={(value) =>
+              dispatch(updateCell({ id: cell.id, content: value }))
+            }
           />
         </Resizable>
         <div className='wrapper'>
