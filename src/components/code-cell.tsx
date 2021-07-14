@@ -2,18 +2,16 @@ import { useEffect } from 'react';
 import CodeEditor from './code-editor';
 import Preview from './preview';
 import Resizable from './resizable';
-import { Cell } from '../state';
-import { useActions } from '../hooks/useActions';
-import { useTypedSelector } from '../hooks/used-typed-selector';
-import { useCumulativeCode } from '../hooks/use-cumulative-code-selector';
+import { Cell } from '../features/cells/cell';
+import { useCumulativeCode, useAppSelector } from '../hooks.ts';
+import { updateCell } from '../features/cells/cellsSlice';
 import './code-cell.css';
 interface CodeCellProps {
   cell: Cell;
 }
 
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
-  const { updateCell, createBundle } = useActions();
-  const bundle = useTypedSelector((state) => state.bundles[cell.id]);
+  const bundle = useAppSelector((state) => state.bundles[cell.id]);
   const cumulativeCode = useCumulativeCode(cell.id);
 
   useEffect(() => {
@@ -41,7 +39,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
         <Resizable direction='horizontal'>
           <CodeEditor
             initialValue={cell.content}
-            onChange={(value) => updateCell(cell.id, value)}
+            onChange={(value) => updateCell({ id: cell.id, content: value })}
           />
         </Resizable>
         <div className='wrapper'>
